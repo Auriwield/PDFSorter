@@ -14,15 +14,22 @@ public class Sorter extends GetFileList {
 
     public void sort(String dirPath) throws IOException{
         createFileList(dirPath);
-        String r = "";
         createDirectory(dirPath);
         System.out.println(badPDF);
         System.out.println(goodPDF);
+        if (dirPath.contains("\\"))
+            moving("\\");
+        else
+            moving("/");
+    }
+
+    void moving(String s) throws IOException {
         int m;
+        String r = "";
         for(File file:paths) {
             if (file.isFile()) {
                 finder(file);
-                m = file.toString().lastIndexOf('\\');
+                m = file.toString().lastIndexOf(s);
                 r = file.toString().substring(m + 1);
                 textCounter -= 3;
                 System.out.println("---------");
@@ -39,7 +46,6 @@ public class Sorter extends GetFileList {
                 textCounter = 0; //objCounter = 0;
             }
         }
-
     }
 
      void finder(File path) throws IOException{
@@ -58,8 +64,13 @@ public class Sorter extends GetFileList {
     }
 
      void createDirectory(String dirPath) {
-        badPDF = dirPath.concat("\\BadPDF\\");
-        goodPDF = dirPath.concat("\\GoodPdf\\");
+         if (dirPath.contains("\\")) {
+             badPDF = dirPath.concat("\\BadPDF\\");
+             goodPDF = dirPath.concat("\\GoodPdf\\");
+         } else {
+             badPDF = dirPath.concat("/BadPDF/");
+             goodPDF = dirPath.concat("/GoodPdf/");
+         }
         File badP = new File(badPDF);
         File goodP = new File(goodPDF);
         boolean l = badP.mkdir();
