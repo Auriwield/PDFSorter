@@ -4,7 +4,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import extclasses.Pdf;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Created by Dinozavrik on 19.12.2015.

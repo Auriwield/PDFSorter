@@ -1,11 +1,7 @@
 package output;
 
 import SortMachine.FileListCreator;
-import com.itextpdf.text.pdf.PdfReader;
 import extclasses.Pdf;
-
-import java.io.IOException;
-import java.util.Map;
 
 
 /**
@@ -14,9 +10,9 @@ import java.util.Map;
 public class ConsoleWriter {
 
     public static void withdraw() {
-        System.out.println(String.format("%-49s %-10s %-10s%-5s", "Name", "Kind", "Month", "Year"));
+        System.out.println(String.format("%-49s %-5s %-11s%-5s", "Name", "Kind", "Month", "Year"));
         for (Pdf pdf : FileListCreator.pdfFiles) {
-            System.out.println(String.format("%-50s%-10s %-10s%-5s",
+            System.out.println(String.format("%-50s%-5s %-11s%-5s",
                     pdf.getName(),
                     pdf.isText() ? "text" : "scan",
                     pdf.getDate().split(" ")[0],
