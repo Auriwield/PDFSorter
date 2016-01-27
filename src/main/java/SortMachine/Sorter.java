@@ -4,13 +4,14 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import extclasses.Pdf;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
  * Created by Dinozavrik on 19.12.2015.
  */
 public class Sorter {
-    public static void sort() throws IOException {
+    public static void sort() {
         for (Pdf file : FileListCreator.pdfFiles) {
             if (file.isFile()) {
                 try {
@@ -34,5 +35,8 @@ public class Sorter {
 
     }
 
-
+    public static void copy(String path) throws FileNotFoundException {
+        //todo: implement this method
+        throw new FileNotFoundException();
+    }
 }
