@@ -1,5 +1,6 @@
 package extclasses;
 
+
 import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -29,13 +30,20 @@ public class Pdf extends File {
     }
 
     public void setDate(String date) {
-        String year = date.substring(2,6);
-        String month = date.substring(6,8);
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(year));
-        cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
-        SimpleDateFormat format = new SimpleDateFormat("MMMM yyyy", myDateFormatSymbols);
-        this.date = format.format(cal.getTime());
+        if (date.contains("D:")) {
+            try {
+                String year = date.substring(2, 6);
+                String month = date.substring(6, 8);
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, Integer.parseInt(year));
+                cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
+                SimpleDateFormat format = new SimpleDateFormat("MMMM yyyy", myDateFormatSymbols);
+                this.date = format.format(cal.getTime());
+            } catch (NumberFormatException e) {
+                    this.date = "XXXX XXXX";
+            }
+        } else
+            this.date = "XXXX XXXX"; //if incorrect pdf's date
     }
 
     private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols(){

@@ -35,11 +35,15 @@ public class FileListCreator {
 
     private static void addFiles(File[] files) {
         for (File file : files) {
-            if (file.isDirectory())
+            try {
+                if (file.isDirectory() && !file.isHidden())
                 addFiles(file.listFiles());
             if (isPdfFile(file))
                 pdfFiles.add(new Pdf(file.getAbsolutePath()));
+            } catch (NullPointerException ignore) {
         }
+    }
+
     }
 
     private static boolean isPdfFile(File pdfFile) {

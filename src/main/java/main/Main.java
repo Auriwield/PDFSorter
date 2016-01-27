@@ -4,13 +4,9 @@ import SortMachine.FileListCreator;
 import SortMachine.Sorter;
 import output.ConsoleWriter;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Auriwield on 24.01.2016.
@@ -37,13 +33,12 @@ public class Main {
                     String path = args[count];
                     Sorter.copy(path);
                 } catch (IndexOutOfBoundsException e) {
-                    System.err.println("Incorrect '/C' value");
+                    System.err.println("Incorrect '/C' path");
                 } catch (FileNotFoundException e) {
                     System.err.println("dir. path is incorrect");
                 }
             }
 
-            //todo: /C + path check and give it to Sorter.copy()
             if (argsList.contains("/T".toLowerCase()))
                 ConsoleWriter.withdrawWithParam(true);
             else if (argsList.contains("/S".toLowerCase()))
@@ -52,6 +47,6 @@ public class Main {
                 ConsoleWriter.withdraw();
         }
     }
-
+//new File(".").getAbsolutePath();
 }
 
