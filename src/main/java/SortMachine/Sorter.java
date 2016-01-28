@@ -3,16 +3,19 @@ package SortMachine;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import extclasses.Pdf;
-import static java.nio.file.StandardCopyOption.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
  * Created by Dinozavrik on 19.12.2015.
  */
 public class Sorter {
+    public static int count = 0;
+    
     public static void sort() {
         System.out.println("Found " + FileListCreator.pdfFiles.size() + " pdf's\n");
         for (Pdf file : FileListCreator.pdfFiles) {
@@ -45,25 +48,28 @@ public class Sorter {
                 forEach(textPdfFiles::add);
         if(textPdfFiles.size() == 0)
             System.err.println("Not found text pdf to copy");
+        count = textPdfFiles.size();
         return textPdfFiles;
     }
 
     public static void copy(String dest) throws IOException {
-        //todo: rewrite this method(it doesn't work)
+        if(dest.charAt(dest.length()-1) != File.separatorChar)
+            dest += (File.separator);
         File destFile = new File(dest);
-        boolean b = true;
-        if (!destFile.exists()) {
+        if(!destFile.exists() || !destFile.isDirectory())
+            destFile.mkdir();
+        for (Pdf pdf : getTextPdfs()) {
+            Path pathSource = Paths.get(pdf.getAbsolutePath());
+            Path pathDestination = Paths.get(destFile.getAbsolutePath() +"/"+ pdf.getName());
             try {
-                b = destFile.mkdir();
-                if (!b)
-                    System.err.println("directory wasn't created");
-            } catch (SecurityException se) {
-                System.err.println("Haven't permission to create a dir");
+                Files.copy(pathSource, pathDestination);
+                count--;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        if(b && destFile.isDirectory()) {
-            for (Pdf pdf : getTextPdfs())
-                Files.copy(pdf.toPath(), destFile.toPath(), REPLACE_EXISTING);
-        }
+    }
+    public static boolean isSuccessfulCopy() {
+        return count == 0;
     }
 }

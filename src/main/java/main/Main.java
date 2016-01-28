@@ -45,6 +45,9 @@ public class Main {
                 ConsoleWriter.withdrawWithParam(false);
             else
                 ConsoleWriter.withdraw();
+            if(Sorter.isSuccessfulCopy())
+                System.out.println("Files successful copied");
+            
         }
     }
 //new File(".").getAbsolutePath();
