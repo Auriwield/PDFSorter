@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class FileListCreator {
     public static ArrayList<Pdf> pdfFiles = new ArrayList<>();
     private String path;
+    private static int count = 0;
 
     public FileListCreator(String path) {
         this.path = path;
@@ -35,15 +36,19 @@ public class FileListCreator {
 
     private static void addFiles(File[] files) {
         for (File file : files) {
+            System.out.printf("\r");
+            System.out.printf("%d pdf's found", count);
             try {
                 if (file.isDirectory() && !file.isHidden())
                 addFiles(file.listFiles());
-            if (isPdfFile(file))
+            if (isPdfFile(file)) {
                 pdfFiles.add(new Pdf(file.getAbsolutePath()));
+                count++;
+            }
             } catch (NullPointerException ignore) {
+            }
         }
-    }
-
+        System.out.printf("\r");
     }
 
     private static boolean isPdfFile(File pdfFile) {
