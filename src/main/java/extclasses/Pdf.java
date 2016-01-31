@@ -2,6 +2,8 @@ package extclasses;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,6 +31,18 @@ public class Pdf extends File {
         return date;
     }
 
+    public void rename() {
+        if(!this.getName().startsWith("!")) {
+            File oldFile = new File(this.getParent(), this.getName());
+            File newFile = new File(this.getParent(), "!".concat(this.getName()));
+            try {
+                Files.move(oldFile.toPath(), newFile.toPath());
+            } catch (IOException e) {
+                System.err.println("ERROR: " + this.getName() + " wasn't renamed");
+            }
+        }
+    }
+
     public void setDate(String date) {
         if (date.contains("D:")) {
             try {
@@ -37,13 +51,13 @@ public class Pdf extends File {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.YEAR, Integer.parseInt(year));
                 cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
-                SimpleDateFormat format = new SimpleDateFormat("MMMM yyyy", myDateFormatSymbols);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy", myDateFormatSymbols);
                 this.date = format.format(cal.getTime());
             } catch (NumberFormatException e) {
-                    this.date = "XXXX XXXX";
+                    this.date = "XXXX";
             }
         } else
-            this.date = "XXXX XXXX"; //if incorrect pdf's date
+            this.date = "XXXX"; //if incorrect pdf's date
     }
 
     private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols(){

@@ -1,7 +1,12 @@
 package output;
 
 import SortMachine.FileListCreator;
+import SortMachine.Sorter;
 import extclasses.Pdf;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 
 
 /**
@@ -11,13 +16,12 @@ public class ConsoleWriter {
     
     public static void withdraw() {
         if(FileListCreator.pdfFiles.size() != 0) {
-            System.out.printf("%-49s %-5s %-6s%-5s\n", "Name", "Kind", "Year", "Month");
-            for (Pdf pdf : FileListCreator.pdfFiles) {
-                System.out.printf("%-50s%-5s %-6s%-5s\n",
+            System.out.printf("%-49s %-5s %-5s\n", "Name", "Kind", "Year");
+            for (Pdf pdf : Sorter.getScanPdfs()) {
+                System.out.printf("%-50s%-5s %-5s\n",
                         pdf.getName().length() < 50 ? pdf.getName() : pdf.getName().substring(0, 49),
                         pdf.isText() ? "text" : "scan",
-                        pdf.getDate().split(" ")[1],
-                        pdf.getDate().split(" ")[0]
+                        pdf.getDate()
                 );
             }
         }
@@ -25,30 +29,57 @@ public class ConsoleWriter {
 
     public static void withdrawNoParam() {
         System.out.println("Determine text pdf files\n");
-        System.out.println("PdfSorter [drive:][path][filename] [/T | /S] [/C dir_path]");
+        System.out.println("PdfSorter [drive:][path][filename] [/T | /A] [/C dir_path] [/R] [/F query]");
         System.out.printf("  %-10s%s\n",
                 "/T",
                 "Show only text pdf's");
         System.out.printf("  %-10s%s\n",
-                "/S",
-                "Show only scan pdf's");
+                "/A",
+                "Show all pdf's");
         System.out.printf("  %-10s%s\n",
                 "/C",
                 "Copy text pdf's to your directory");
+        System.out.printf("  %-10s%s\n",
+                "/R",
+                "rename \"file.pdf\" to \"!file.pdf\"");
+        System.out.printf("  %-10s%s\n",
+                "/F",
+                "find pdf's with your query");
 
     }
 
-    public static void withdrawWithParam(boolean text) {
+    public static void withdrawTextPdfs() {
         if(FileListCreator.pdfFiles.size() != 0) {
-            System.out.printf("%-49s %-10s %-10s%-5s\n", "Name", "Kind", "Month", "Year");
-            FileListCreator.pdfFiles.stream().filter((pdf -> (pdf.isText() && text || !pdf.isText() && !text))).forEach(pdf -> System.out.printf(
-                            "%-50s%-10s %-10s%-5s\n",
+            System.out.printf("%-49s %-10s %-5s\n", "Name", "Kind", "Year");
+            Sorter.getTextPdfs()
+                    .stream()
+                    .forEach(pdf -> System.out.printf(
+                            "%-50s%-10s %-5s\n",
                             pdf.getName().length() < 50 ? pdf.getName() : pdf.getName().substring(0, 49),
                             pdf.isText() ? "text" : "scan",
-                            pdf.getDate().split(" ")[0],
-                            pdf.getDate().split(" ")[1])
+                            pdf.getDate())
             );
         }
     }
+
+public static void withdrawAll() {
+        if(FileListCreator.pdfFiles.size() != 0) {
+            System.out.printf("%-49s %-10s %-5s\n", "Name", "Kind", "Year");
+            FileListCreator.pdfFiles.stream().forEach(pdf -> System.out.printf(
+                            "%-50s%-10s %-5s\n",
+                            pdf.getName().length() < 50 ? pdf.getName() : pdf.getName().substring(0, 49),
+                            pdf.isText() ? "text" : "scan",
+                            pdf.getDate())
+            );
+        }
+    }
+
+public static void withdrawMapResult(Map<String, HashSet<Integer>> result) {
+    if(result.size() == 0)
+        System.out.println("No matches found");
+    for (Map.Entry<String, HashSet<Integer>> pair : result.entrySet()) {
+        System.out.println(pair.getKey() + " " + pair.getValue());
+    }
+}
 
 }
