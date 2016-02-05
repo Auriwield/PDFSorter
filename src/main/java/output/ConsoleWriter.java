@@ -3,6 +3,7 @@ package output;
 import SortMachine.FileListCreator;
 import SortMachine.Sorter;
 import extclasses.Pdf;
+import main.Main;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,12 +20,22 @@ public class ConsoleWriter {
             System.out.printf("%-49s %-5s %-5s\n", "Name", "Kind", "Year");
             for (Pdf pdf : Sorter.getScanPdfs()) {
                 System.out.printf("%-50s%-5s %-5s\n",
-                        pdf.getName().length() < 50 ? pdf.getName() : pdf.getName().substring(0, 49),
+                        getName(pdf.getAbsolutePath()),
                         pdf.isText() ? "text" : "scan",
                         pdf.getDate()
                 );
             }
         }
+    }
+
+    private static String getName(String path) {
+        String subs = path.substring(Main.LENGTH);
+        if (subs.length() < 50)
+            return subs;
+        StringBuilder sb = new StringBuilder(subs);
+        int chars = subs.length() - 49;
+        sb.replace(0, chars+3,"...");
+        return sb.toString();
     }
 
     public static void withdrawNoParam() {
@@ -55,7 +66,7 @@ public class ConsoleWriter {
                     .stream()
                     .forEach(pdf -> System.out.printf(
                             "%-50s%-10s %-5s\n",
-                            pdf.getName().length() < 50 ? pdf.getName() : pdf.getName().substring(0, 49),
+                            getName(pdf.getAbsolutePath()),
                             pdf.isText() ? "text" : "scan",
                             pdf.getDate())
             );
@@ -65,9 +76,11 @@ public class ConsoleWriter {
 public static void withdrawAll() {
         if(FileListCreator.pdfFiles.size() != 0) {
             System.out.printf("%-49s %-10s %-5s\n", "Name", "Kind", "Year");
-            FileListCreator.pdfFiles.stream().forEach(pdf -> System.out.printf(
+            FileListCreator.pdfFiles
+                    .stream()
+                    .forEach(pdf -> System.out.printf(
                             "%-50s%-10s %-5s\n",
-                            pdf.getName().length() < 50 ? pdf.getName() : pdf.getName().substring(0, 49),
+                            getName(pdf.getAbsolutePath()),
                             pdf.isText() ? "text" : "scan",
                             pdf.getDate())
             );

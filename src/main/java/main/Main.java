@@ -4,18 +4,16 @@ import SortMachine.FileListCreator;
 import extclasses.ArgumentParser;
 import output.ConsoleWriter;
 
-
 import java.io.IOException;
-
-
 
 /**
  * Created by Auriwield on 24.01.2016.
  */
 public class Main {
+    public static int LENGTH;
 
     public static void main(String[] args) throws IOException {
-        /*BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+       /* BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String arg = reader.readLine();
         reader.close();
         if (arg.length() == 0)
@@ -24,6 +22,7 @@ public class Main {
         if (args.length == 0)
             ConsoleWriter.withdrawNoParam();
         else {
+            LENGTH = args[0].length();
             FileListCreator creator = new FileListCreator(args[0]);
             creator.createFileList();
             ArgumentParser parser = ArgumentParser.getInstance();

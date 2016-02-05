@@ -44,6 +44,8 @@ public class Pdf extends File {
     }
 
     public void setDate(String date) {
+        if (date == null)
+            return;
         if (date.contains("D:")) {
             try {
                 String year = date.substring(2, 6);
